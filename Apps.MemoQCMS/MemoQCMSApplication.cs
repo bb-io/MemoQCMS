@@ -1,12 +1,12 @@
 ﻿using Blackbird.Applications.Sdk.Common;
 
-namespace Apps.App;
+namespace Apps.MemoQCMS;
 
-public class Application : IApplication
+public class MemoQCMSApplication : IApplication
 {
     public string Name
     {
-        get => "App";
+        get => "memoQ CMS";
         set { }
     }
 
