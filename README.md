@@ -24,6 +24,14 @@ Before you can connect you need to make sure that:
 - **Create order**.
 - **Commit order** changes the status of an order to _Committed_ which means that all jobs of the order have been submitted.
 
+### Jobs
+
+- **List jobs** returns the translation jobs of the specified order.
+- **Get job**.
+- **Create job** creates a new translation job in the specified order. Note that you cannot add a new job to an order with a _Committed_ status.
+- **Download translation** downloads the translation for the specified job. The job must be in the _In Delivery_ or _Delivered_ state before the translation can be downloaded.
+- **Deliver job** changes the status of a job to _Delivered_.
+
 ## Feedback
 
 Do you want to use this app or do you have feedback on our implementation? Reach out to us using the [established channels](https://www.blackbird.io/) or create an issue.

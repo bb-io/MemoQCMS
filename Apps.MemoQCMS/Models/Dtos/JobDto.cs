@@ -5,7 +5,7 @@ namespace Apps.MemoQCMS.Models.Dtos;
 public class JobDto
 {
     [Display("Job")]
-    public int TranslationJobId { get; set; }
+    public string TranslationJobId { get; set; }
     
     public string Name { get; set; }
     
