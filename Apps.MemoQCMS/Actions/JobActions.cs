@@ -1,6 +1,7 @@
 ﻿using System.IO.Compression;
 using System.Net.Mime;
-using Apps.MemoQCMS.Api;
+using System.Text;
+using Apps.MemoQCMS.Constants;
 using Apps.MemoQCMS.Models;
 using Apps.MemoQCMS.Models.Dtos;
 using Apps.MemoQCMS.Models.Identifiers;
@@ -9,6 +10,7 @@ using Apps.MemoQCMS.Models.Responses.Jobs;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
 using Blackbird.Applications.Sdk.Common.Invocation;
+using Blackbird.Applications.Sdk.Utils.Extensions.Sdk;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -40,19 +42,44 @@ public class JobActions : MemoQCMSInvocable
     public async Task<JobDto> CreateJob([ActionParameter] OrderIdentifier orderIdentifier,
         [ActionParameter] CreateJobRequest input, [ActionParameter] FileWrapper file)
     {
-        var request = new MemoQCMSRequest($"/orders/{orderIdentifier.OrderId}/jobs", Method.Post);
-        request
-            .AddFile("file", file.File.Bytes, file.File.Name)
-            .AddParameter("translationJob", JsonConvert.SerializeObject(new
+        using (var httpClient = new HttpClient())
+        {
+            var connectionKey = InvocationContext.AuthenticationCredentialsProviders.Get(CredsNames.ConnectionKey).Value;
+            httpClient.DefaultRequestHeaders.Add("Authorization", $"CMSGATEWAY-API {connectionKey}");
+            
+            using (var content = new MultipartFormDataContent())
             {
-                input.Name,
-                SourceLang = input.SourceLanguage,
-                TargetLang = input.TargetLanguage,
-                FileType = Path.GetExtension(file.File.Name).TrimStart('.')
-            }));
-
-        var job = await Client.ExecuteWithErrorHandling<JobDto>(request);
-        return job;
+                var fileContent = new ByteArrayContent(file.File.Bytes);
+                fileContent.Headers.Add("Content-Type", file.File.ContentType);
+                content.Add(fileContent, "file", file.File.Name);
+            
+                var translationJob = new
+                {
+                    input.Name,
+                    SourceLang = input.SourceLanguage,
+                    TargetLang = input.TargetLanguage,
+                    FileType = Path.GetExtension(file.File.Name).TrimStart('.')
+                };
+                var translationJobJson = JsonConvert.SerializeObject(translationJob);
+                content.Add(new StringContent(translationJobJson, Encoding.UTF8, "application/json"), "translationJob");
+        
+                var url = InvocationContext.AuthenticationCredentialsProviders.Get(CredsNames.BaseUrl).Value +
+                          $"/orders/{orderIdentifier.OrderId}/jobs";
+                using (var response = await httpClient.PostAsync(url, content))
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+                    
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var job = JsonConvert.DeserializeObject<JobDto>(result);
+                        return job;
+                    }
+                    
+                    var error = JsonConvert.DeserializeObject<ErrorDto>(result);
+                    throw new Exception(error.Message);
+                }
+            }
+        }
     }
 
     [Action("Deliver job", Description = "Change the status of a job to \"Delivered\".")]
