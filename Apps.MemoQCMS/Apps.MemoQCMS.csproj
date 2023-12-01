@@ -5,8 +5,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <Product>memoQ CMS</Product>
-        <Description>Description</Description>
-        <Version>1.0.0</Version>
+        <Description>Efficient job submission, processing, and delivery within the memoQ Server environment</Description>
+        <Version>1.0.1</Version>
         <AssemblyName>Apps.MemoQCMS</AssemblyName>
     </PropertyGroup>
 
