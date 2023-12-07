@@ -32,7 +32,7 @@ Before you can connect you need to make sure that:
 
 - **List orders**. Orders can be optionally filtered using input parameters.
 - **Get order**.
-- **Create order**.
+- **Create order**. Leave the _Callback URL_ parameter unspecified if you intend to use **On job completed** and/or **On job cancelled** events.
 - **Commit order** changes the status of an order to _Committed_ which means that all jobs of the order have been submitted.
 
 ### Jobs
@@ -42,6 +42,11 @@ Before you can connect you need to make sure that:
 - **Create job** creates a new translation job in the specified order. Note that you cannot add a new job to an order with a _Committed_ status.
 - **Download translation** downloads the translation for the specified job. The job must be in the _In Delivery_ or _Delivered_ state before the translation can be downloaded.
 - **Deliver job** changes the status of a job to _Delivered_.
+
+## Events
+
+- **On job completed** and **On job completed (manual)** are triggered when a job is completed, signifying that translation is ready and can be downloaded.
+- **On job cancelled** and **On job cancelled (manual)** are triggered when a job is cancelled.
 
 ## Feedback
 
