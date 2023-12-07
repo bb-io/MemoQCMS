@@ -6,6 +6,8 @@ using Apps.MemoQCMS.Models.Responses.Orders;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
 using Blackbird.Applications.Sdk.Common.Invocation;
+using Blackbird.Applications.Sdk.Utils.Extensions.Sdk;
+using Blackbird.Applications.Sdk.Utils.Extensions.String;
 using RestSharp;
 
 namespace Apps.MemoQCMS.Actions;
@@ -48,12 +50,14 @@ public class OrderActions : MemoQCMSInvocable
     [Action("Create order", Description = "Create a new order.")]
     public async Task<OrderDto> CreateOrder([ActionParameter] CreateOrderRequest input)
     {
+        var connectionKey = InvocationContext.AuthenticationCredentialsProviders.Get(CredsNames.ConnectionKey).Value;
         var requestBody = new
         {
             input.Name,
             input.Deadline,
             CallbackUrl = input.CallbackUrl ??
                           $"{InvocationContext.UriInfo.BridgeServiceUrl.ToString().TrimEnd('/')}{ApplicationConstants.BridgePath}"
+                              .SetQueryParameter("id", connectionKey)
         };
         
         var order = await ExecuteRequestAsync<OrderDto>("/orders", Method.Post, requestBody);
