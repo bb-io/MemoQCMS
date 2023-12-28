@@ -10,6 +10,8 @@ using Apps.MemoQCMS.Models.Responses.Jobs;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
 using Blackbird.Applications.Sdk.Common.Invocation;
+using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
+using Blackbird.Applications.Sdk.Utils.Extensions.Files;
 using Blackbird.Applications.Sdk.Utils.Extensions.Sdk;
 using Newtonsoft.Json;
 using RestSharp;
@@ -19,8 +21,12 @@ namespace Apps.MemoQCMS.Actions;
 [ActionList]
 public class JobActions : MemoQCMSInvocable
 {
-    public JobActions(InvocationContext invocationContext) : base(invocationContext)
+    private readonly IFileManagementClient _fileManagementClient;
+    
+    public JobActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) 
+        : base(invocationContext)
     {
+        _fileManagementClient = fileManagementClient;
     }
     
     [Action("List jobs", Description = "List the translation jobs of the specified order.")]
@@ -49,7 +55,9 @@ public class JobActions : MemoQCMSInvocable
             
             using (var content = new MultipartFormDataContent())
             {
-                var fileContent = new ByteArrayContent(file.File.Bytes);
+                var fileStream = await _fileManagementClient.DownloadAsync(file.File);
+                var fileBytes = await fileStream.GetByteData();
+                var fileContent = new ByteArrayContent(fileBytes);
                 fileContent.Headers.Add("Content-Type", file.File.ContentType);
                 content.Add(fileContent, "file", file.File.Name);
             
@@ -109,15 +117,10 @@ public class JobActions : MemoQCMSInvocable
 
         if (!MimeTypes.TryGetMimeType(filename, out var contentType))
             contentType = MediaTypeNames.Application.Octet;
-        
-        return new()
-        {
-            File = new(decompressedTranslation)
-            {
-                Name = filename,
-                ContentType = contentType
-            }
-        };
+
+        using var stream = new MemoryStream(decompressedTranslation);
+        var file = await _fileManagementClient.UploadAsync(stream, contentType, filename);
+        return new() { File = file };
     }
     
     private static byte[] DecompressGZipFile(byte[] compressedData)
