@@ -28,7 +28,7 @@ Before you can connect you need to make sure that:
 
 ## Actions
 
-### Orders 
+### Orders
 
 - **List orders**. Orders can be optionally filtered using input parameters.
 - **Get order**.
