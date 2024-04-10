@@ -8,12 +8,12 @@
         <Description>Efficient job submission, processing, and delivery within the memoQ Server environment</Description>
         <Version>1.1.1</Version>
         <AssemblyName>Apps.MemoQCMS</AssemblyName>
-        <LangVersion>11</LangVersion>
+        <LangVersion>12</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Blackbird.Applications.Sdk.Common" Version="2.3.2-alpha1" />
         <PackageReference Include="Blackbird.Applications.SDK.Extensions.FileManagement" Version="1.0.1" />
+        <PackageReference Include="Blackbird.Applications.Sdk.Common" Version="2.6.0" />
         <PackageReference Include="Blackbird.Applications.Sdk.Utils" Version="1.0.13" />
         <PackageReference Include="MimeTypes" Version="2.4.1">
           <PrivateAssets>all</PrivateAssets>
