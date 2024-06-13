@@ -16,10 +16,10 @@ public class ConnectionValidator : IConnectionValidator
 
         try
         {
-            await client.ExecuteWithErrorHandling(request);
+            var res = await client.ExecuteWithErrorHandling(request);
             return new()
             {
-                IsValid = true
+                IsValid = res.Content?.Contains("ClientId") ?? false,
             };
         }
         catch (Exception exception)
