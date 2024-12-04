@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
         <Product>memoQ CMS</Product>
         <Description>Efficient job submission, processing, and delivery within the memoQ Server environment</Description>
-        <Version>1.1.3</Version>
+        <Version>1.1.4</Version>
         <AssemblyName>Apps.MemoQCMS</AssemblyName>
         <LangVersion>12</LangVersion>
     </PropertyGroup>
