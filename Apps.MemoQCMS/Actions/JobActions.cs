@@ -48,6 +48,9 @@ public class JobActions : MemoQCMSInvocable
     public async Task<JobDto> CreateJob([ActionParameter] OrderIdentifier orderIdentifier,
         [ActionParameter] CreateJobRequest input, [ActionParameter] FileWrapper file)
     {
+        // memoQ CMS does not accept these characters
+        var name = input.Name.Replace("/", "_").Replace("\\", "_").Replace(":", "_");
+
         using (var httpClient = new HttpClient())
         {
             var connectionKey = InvocationContext.AuthenticationCredentialsProviders.Get(CredsNames.ConnectionKey).Value;
@@ -63,7 +66,7 @@ public class JobActions : MemoQCMSInvocable
             
                 var translationJob = new
                 {
-                    input.Name,
+                    Name = name,
                     SourceLang = input.SourceLanguage,
                     TargetLang = input.TargetLanguage,
                     FileType = Path.GetExtension(file.File.Name).TrimStart('.')
