@@ -12,7 +12,6 @@ public class ConnectionDefinition : IConnectionDefinition
         {
             Name = "Connection key",
             AuthenticationType = ConnectionAuthenticationType.Undefined,
-            ConnectionUsage = ConnectionUsage.Actions,
             ConnectionProperties = new List<ConnectionProperty>
             {
                 new(CredsNames.ConnectionKey) { DisplayName = "Connection key", Sensitive = true },
@@ -26,17 +25,13 @@ public class ConnectionDefinition : IConnectionDefinition
     {
         var connectionKey = values.First(v => v.Key == CredsNames.ConnectionKey);
         yield return new AuthenticationCredentialsProvider(
-            AuthenticationCredentialsRequestLocation.None,
             connectionKey.Key,
             connectionKey.Value
         );
 
-        var baseUrl = new Uri(values.First(v => v.Key == CredsNames.BaseUrl).Value).GetLeftPart(UriPartial.Authority) +
-                      "/memoqservercmsgateway/v1";
         yield return new AuthenticationCredentialsProvider(
-            AuthenticationCredentialsRequestLocation.None,
             CredsNames.BaseUrl,
-            baseUrl
+            values.First(v => v.Key == CredsNames.BaseUrl).Value
         );
     }
 }
