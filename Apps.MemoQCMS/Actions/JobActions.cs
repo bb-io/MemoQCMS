@@ -92,7 +92,13 @@ public class JobActions : MemoQCMSInvocable
                     }
                     
                     var error = JsonConvert.DeserializeObject<ErrorDto>(result);
-                        throw new Exception(error.Message);
+
+                    if (error?.ErrorCode == "TranslationJobSourceLangIsInvalid" || error?.ErrorCode == "TranslationJobTargetLangIsInvalid")
+                    {
+                        throw new PluginMisconfigurationException(error.Message);
+                    }
+
+                    throw new Exception(error.Message);
                 }
             }
         }
