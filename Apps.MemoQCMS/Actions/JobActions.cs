@@ -52,7 +52,10 @@ public class JobActions : MemoQCMSInvocable
     {
         // memoQ CMS does not accept these characters
         var name = input.Name.Replace("/", "_").Replace("\\", "_").Replace(":", "_");
-
+        if (!string.IsNullOrEmpty(input.Name) && !string.IsNullOrEmpty(input.SourceLanguage) && !string.IsNullOrEmpty(input.TargetLanguage))
+        {
+            throw new PluginMisconfigurationException("Make sure that the input values are correct.");
+        }
         using (var httpClient = new HttpClient())
         {
             var connectionKey = InvocationContext.AuthenticationCredentialsProviders.Get(CredsNames.ConnectionKey).Value;
@@ -89,10 +92,6 @@ public class JobActions : MemoQCMSInvocable
                     }
                     
                     var error = JsonConvert.DeserializeObject<ErrorDto>(result);
-                    if (error.ErrorCode == "InvalidArgument") // TODO: Should we handle the invalid argument as input, or leave it to the MemoQ api?
-                    {
-                        throw new PluginMisconfigurationException(error.Message + " Make sure that the input values are correct.");
-                    }
                         throw new Exception(error.Message);
                 }
             }
