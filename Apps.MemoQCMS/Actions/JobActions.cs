@@ -52,7 +52,7 @@ public class JobActions : MemoQCMSInvocable
     {
         // memoQ CMS does not accept these characters
         var name = input.Name.Replace("/", "_").Replace("\\", "_").Replace(":", "_");
-        if (!string.IsNullOrEmpty(input.Name) && !string.IsNullOrEmpty(input.SourceLanguage) && !string.IsNullOrEmpty(input.TargetLanguage))
+        if (string.IsNullOrEmpty(input.Name) || string.IsNullOrEmpty(input.SourceLanguage) || string.IsNullOrEmpty(input.TargetLanguage))
         {
             throw new PluginMisconfigurationException("Make sure that the input values are correct.");
         }
