@@ -15,6 +15,8 @@ using Blackbird.Applications.Sdk.Utils.Extensions.Files;
 using Blackbird.Applications.Sdk.Utils.Extensions.Sdk;
 using Newtonsoft.Json;
 using RestSharp;
+using Blackbird.Applications.Sdk.Common.Exceptions;
+
 
 namespace Apps.MemoQCMS.Actions;
 
@@ -87,7 +89,11 @@ public class JobActions : MemoQCMSInvocable
                     }
                     
                     var error = JsonConvert.DeserializeObject<ErrorDto>(result);
-                    throw new Exception(error.Message);
+                    if (error.ErrorCode == "InvalidArgument") // TODO: Should we handle the invalid argument as input, or leave it to the MemoQ api?
+                    {
+                        throw new PluginMisconfigurationException(error.Message + " Make sure that the input values are correct.");
+                    }
+                        throw new Exception(error.Message);
                 }
             }
         }
