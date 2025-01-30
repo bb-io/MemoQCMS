@@ -54,8 +54,9 @@ public class JobActions : MemoQCMSInvocable
         var name = input.Name.Replace("/", "_").Replace("\\", "_").Replace(":", "_");
         if (string.IsNullOrEmpty(input.Name) || string.IsNullOrEmpty(input.SourceLanguage) || string.IsNullOrEmpty(input.TargetLanguage))
         {
-            throw new PluginMisconfigurationException("Make sure that the input values are correct.");
+            throw new PluginMisconfigurationException("Make sure that the input values are correct."); //Rework wording
         }
+
         using (var httpClient = new HttpClient())
         {
             var connectionKey = InvocationContext.AuthenticationCredentialsProviders.Get(CredsNames.ConnectionKey).Value;
@@ -98,7 +99,7 @@ public class JobActions : MemoQCMSInvocable
                         throw new PluginMisconfigurationException(error.Message);
                     }
 
-                    throw new Exception(error.Message);
+                    throw new PluginApplicationException(error.Message);
                 }
             }
         }
