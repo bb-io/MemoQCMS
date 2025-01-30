@@ -81,7 +81,7 @@ public class JobActions : MemoQCMSInvocable
                 content.Add(new StringContent(translationJobJson, Encoding.UTF8, "application/json"), "translationJob");
         
                 var url = InvocationContext.AuthenticationCredentialsProviders.Get(CredsNames.BaseUrl).Value +
-                          $"/orders/{orderIdentifier.OrderId}/jobs";
+                          $"/memoqservercmsgateway/v1/orders/{orderIdentifier.OrderId}/jobs";
                 using (var response = await httpClient.PostAsync(url, content))
                 {
                     var result = await response.Content.ReadAsStringAsync();
