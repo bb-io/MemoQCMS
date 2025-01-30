@@ -13,7 +13,7 @@ namespace Tests.MemoQCMS
     public class ValidatorTests : TestBase
     {
         [TestMethod]
-        public async Task ValidatesCorrectConnection() // This works if you include the "/memoqservercmsgateway/v1" or not, however other tests fail without url building, weird.
+        public async Task ValidatesCorrectConnection()
         {
             var validator = new ConnectionValidator();
 
