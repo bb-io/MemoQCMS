@@ -54,7 +54,7 @@ public class JobActions : MemoQCMSInvocable
         var name = input.Name.Replace("/", "_").Replace("\\", "_").Replace(":", "_");
         if (string.IsNullOrEmpty(input.Name) || string.IsNullOrEmpty(input.SourceLanguage) || string.IsNullOrEmpty(input.TargetLanguage))
         {
-            throw new PluginMisconfigurationException("Make sure that the input values are correct."); //Rework wording
+            throw new PluginMisconfigurationException("One or more input is missing, make sure that the input values are correct."); 
         }
 
         using (var httpClient = new HttpClient())
