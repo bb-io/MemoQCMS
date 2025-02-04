@@ -10,12 +10,6 @@ public class MemoQCMSApplication : IApplication, ICategoryProvider
         get => [ApplicationCategory.CatAndTms];
         set { }
     }
-    
-    public string Name
-    {
-        get => "memoQ CMS";
-        set { }
-    }
 
     public T GetInstance<T>()
     {

@@ -15,6 +15,8 @@ using Blackbird.Applications.Sdk.Utils.Extensions.Files;
 using Blackbird.Applications.Sdk.Utils.Extensions.Sdk;
 using Newtonsoft.Json;
 using RestSharp;
+using Blackbird.Applications.Sdk.Common.Exceptions;
+
 
 namespace Apps.MemoQCMS.Actions;
 
@@ -50,6 +52,20 @@ public class JobActions : MemoQCMSInvocable
     {
         // memoQ CMS does not accept these characters
         var name = input.Name.Replace("/", "_").Replace("\\", "_").Replace(":", "_");
+        if (string.IsNullOrEmpty(input.Name))
+        {
+            throw new PluginMisconfigurationException("Input name is missing, make sure that the input values are correct."); 
+        }
+        if (string.IsNullOrEmpty(input.SourceLanguage))
+        {
+            throw new PluginMisconfigurationException("Source language is missing, make sure that the input values are correct.");
+
+        }
+        if (string.IsNullOrEmpty(input.TargetLanguage))
+        {
+            throw new PluginMisconfigurationException("Target language is missing, make sure that the input values are correct.");
+
+        }
 
         using (var httpClient = new HttpClient())
         {
@@ -75,7 +91,7 @@ public class JobActions : MemoQCMSInvocable
                 content.Add(new StringContent(translationJobJson, Encoding.UTF8, "application/json"), "translationJob");
         
                 var url = InvocationContext.AuthenticationCredentialsProviders.Get(CredsNames.BaseUrl).Value +
-                          $"/orders/{orderIdentifier.OrderId}/jobs";
+                          $"/memoqservercmsgateway/v1/orders/{orderIdentifier.OrderId}/jobs";
                 using (var response = await httpClient.PostAsync(url, content))
                 {
                     var result = await response.Content.ReadAsStringAsync();
@@ -87,7 +103,13 @@ public class JobActions : MemoQCMSInvocable
                     }
                     
                     var error = JsonConvert.DeserializeObject<ErrorDto>(result);
-                    throw new Exception(error.Message);
+
+                    if (error?.ErrorCode == "TranslationJobSourceLangIsInvalid" || error?.ErrorCode == "TranslationJobTargetLangIsInvalid")
+                    {
+                        throw new PluginMisconfigurationException(error.Message);
+                    }
+
+                    throw new PluginApplicationException(error.Message);
                 }
             }
         }

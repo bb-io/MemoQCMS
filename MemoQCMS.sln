@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Apps.MemoQCMS", "Apps.MemoQCMS\Apps.MemoQCMS.csproj", "{EB25604E-8EBA-464E-BEDF-30EA95395AD3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{E5E09E38-20D7-4ABA-A1E8-AD1B8D2113B1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.MemoQCMS", "Tests.MemoQCMS\Tests.MemoQCMS.csproj", "{18BEEF21-012E-4EE2-BFE0-5BE4588187D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{EB25604E-8EBA-464E-BEDF-30EA95395AD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB25604E-8EBA-464E-BEDF-30EA95395AD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB25604E-8EBA-464E-BEDF-30EA95395AD3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E5E09E38-20D7-4ABA-A1E8-AD1B8D2113B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E5E09E38-20D7-4ABA-A1E8-AD1B8D2113B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E5E09E38-20D7-4ABA-A1E8-AD1B8D2113B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E5E09E38-20D7-4ABA-A1E8-AD1B8D2113B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18BEEF21-012E-4EE2-BFE0-5BE4588187D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18BEEF21-012E-4EE2-BFE0-5BE4588187D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18BEEF21-012E-4EE2-BFE0-5BE4588187D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18BEEF21-012E-4EE2-BFE0-5BE4588187D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
