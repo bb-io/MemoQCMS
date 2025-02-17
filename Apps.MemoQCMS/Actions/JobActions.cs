@@ -16,6 +16,8 @@ using Blackbird.Applications.Sdk.Utils.Extensions.Sdk;
 using Newtonsoft.Json;
 using RestSharp;
 using Blackbird.Applications.Sdk.Common.Exceptions;
+using Blackbird.Applications.Sdk.Common.Dynamic;
+using Apps.MemoQCMS.DataSourceHandlers;
 
 
 namespace Apps.MemoQCMS.Actions;
@@ -65,6 +67,16 @@ public class JobActions : MemoQCMSInvocable
         {
             throw new PluginMisconfigurationException("Target language is missing, make sure that the input values are correct.");
 
+        }
+
+        var dataSourceContext = new DataSourceContext();
+        var targetLanguageHandler = new TargetLanguageDataSourceHandler(InvocationContext);
+        var allowedTargetLanguages = await targetLanguageHandler.GetDataAsync(dataSourceContext, CancellationToken.None);
+
+        if (!allowedTargetLanguages.ContainsKey(input.TargetLanguage))
+        {
+            throw new PluginMisconfigurationException(
+                $"Target language '{input.TargetLanguage}' is not allowed for this account. Please chekc your input and try again");
         }
 
         using (var httpClient = new HttpClient())
