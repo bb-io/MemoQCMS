@@ -1,6 +1,8 @@
 ﻿using Apps.MemoQCMS.Api;
 using Blackbird.Applications.Sdk.Common;
+using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Common.Invocation;
+using Newtonsoft.Json;
 using RestSharp;
 
 namespace Apps.MemoQCMS;
@@ -36,5 +38,10 @@ public class MemoQCMSInvocable : BaseInvocable
             request.AddJsonBody(requestBody);
 
         return request;
+    }
+
+    protected Exception ConfigureErrorException(RestResponse response)
+    {
+        throw new PluginApplicationException(response?.ErrorMessage ?? response?.Content ?? string.Empty);
     }
 }
