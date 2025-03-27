@@ -143,8 +143,9 @@ public class JobActions : MemoQCMSInvocable
         var job = await ExecuteRequestAsync<JobDto>($"/jobs/{jobIdentifier.JobId}", Method.Get);
         var translationResponse = await ExecuteRequestAsync($"/jobs/{jobIdentifier.JobId}/translation", Method.Get);
         
-        var originalFilename = translationResponse.ContentHeaders.First(header => header.Name == "Content-Disposition")
-            .Value.ToString().Split("filename=")[^1];
+        var originalFilename = translationResponse?.ContentHeaders?.First(header => header.Name == "Content-Disposition")?.Value?
+                                                                 .ToString()?
+                                                                 .Split("filename=")[^1];
         var originalExtension = Path.GetExtension(originalFilename);
         var actualExtension = originalExtension == ".pdf" ? ".docx" : originalExtension;
 
