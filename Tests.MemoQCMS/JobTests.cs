@@ -18,11 +18,23 @@ namespace Tests.MemoQCMS
         {
             var actions = new JobActions(InvocationContext, FileManager);
 
-            var orderidentifier = new OrderIdentifier() { OrderId = "241204-FVY" };
+            var orderidentifier = new OrderIdentifier() { OrderId = "250326-0XL" };
 
             var result = await actions.ListJobs(orderidentifier);
-            Console.WriteLine(result.Jobs);
             Assert.IsNotNull(result.Jobs);
+
+            foreach (var job in result.Jobs)
+            {
+                Console.WriteLine($"Job ID: {job.TranslationJobId}");
+                Console.WriteLine($"Name: {job.Name}");
+                Console.WriteLine($"Url: {job.Url}");
+                Console.WriteLine($"Source language: {job.SourceLang}");
+                Console.WriteLine($"Target language: {job.TargetLang}");
+                Console.WriteLine($"File type: {job.FileType}");
+                Console.WriteLine($"Status: {job.Status}");
+                Console.WriteLine($"Order ID: {job.OrderId}");
+                Console.WriteLine(new string('-', 50));
+            }
         }
 
         [TestMethod]

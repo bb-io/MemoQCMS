@@ -4,7 +4,7 @@ namespace Apps.MemoQCMS.Models.Dtos;
 
 public class JobDto
 {
-    [Display("Job")]
+    [Display("Job ID")]
     public string TranslationJobId { get; set; }
     
     public string Name { get; set; }
@@ -22,6 +22,6 @@ public class JobDto
     
     public string Status { get; set; }
     
-    [Display("Order")]
+    [Display("Order ID")]
     public string OrderId { get; set; }
 }

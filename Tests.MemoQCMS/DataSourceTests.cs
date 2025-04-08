@@ -26,5 +26,20 @@ namespace Tests.MemoQCMS
             }
            
         }
+
+        [TestMethod]
+        public async Task GetOrderHandler_ReturnsValue()
+        {
+            var dataSourceHandler = new OrderDataSourceHandler(InvocationContext);
+            var context = new DataSourceContext { SearchString = "" };
+            var data = await dataSourceHandler.GetDataAsync(context, CancellationToken.None);
+
+            foreach (var item in data)
+            {
+                Console.WriteLine($"{item.Key} - {item.Value}");
+                Assert.IsTrue(data.Count > 0);
+            }
+
+        }
     }
 }

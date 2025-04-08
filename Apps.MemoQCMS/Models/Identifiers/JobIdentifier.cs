@@ -6,7 +6,7 @@ namespace Apps.MemoQCMS.Models.Identifiers;
 
 public class JobIdentifier
 {
-    [Display("Job")]
+    [Display("Job ID")]
     [DataSource(typeof(JobDataSourceHandler))]
     public string JobId { get; set; }
 }
