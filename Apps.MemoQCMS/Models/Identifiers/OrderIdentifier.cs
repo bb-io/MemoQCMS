@@ -6,7 +6,7 @@ namespace Apps.MemoQCMS.Models.Identifiers;
 
 public class OrderIdentifier
 {
-    [Display("Order")]
+    [Display("Order ID")]
     [DataSource(typeof(OrderDataSourceHandler))]
     public string OrderId { get; set; }
 }

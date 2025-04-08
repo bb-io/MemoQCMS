@@ -4,7 +4,7 @@ namespace Apps.MemoQCMS.Models.Dtos;
 
 public class OrderDto
 {
-    [Display("Order")]
+    [Display("Order ID")]
     public string OrderId { get; set; }
     
     public string Name { get; set; }

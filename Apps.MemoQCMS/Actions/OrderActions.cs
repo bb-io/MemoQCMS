@@ -27,13 +27,13 @@ public class OrderActions : MemoQCMSInvocable
 
         if (input.CreatedAfter != null)
             orders = orders.Where(order => order.TimeCreated >= input.CreatedAfter);
-        
+
         if (input.CreatedBefore != null)
             orders = orders.Where(order => order.TimeCreated <= input.CreatedBefore);
-        
+
         if (input.DeadlineAfter != null)
             orders = orders.Where(order => order.Deadline == null || order.Deadline >= input.DeadlineAfter);
-        
+
         if (input.DeadlineBefore != null)
             orders = orders.Where(order => order.Deadline == null || order.Deadline <= input.DeadlineBefore);
 
@@ -41,10 +41,45 @@ public class OrderActions : MemoQCMSInvocable
     }
 
     [Action("Get order", Description = "Retrieve information about an order.")]
-    public async Task<OrderDto> GetOrder([ActionParameter] OrderIdentifier orderIdentifier)
+    public async Task<OrderResponse> GetOrder([ActionParameter] OrderIdentifier orderIdentifier)
     {
         var order = await ExecuteRequestAsync<OrderDto>($"/orders/{orderIdentifier.OrderId}", Method.Get);
-        return order;
+
+        var jobs = await ExecuteRequestAsync<IEnumerable<JobDto>>($"/orders/{orderIdentifier.OrderId}/jobs", Method.Get);
+        string jobsCompletion;
+
+        if (jobs != null && jobs.Any())
+        {
+            if (jobs.All(job => job.Status == "DeliveredToSource"))
+            {
+                jobsCompletion = "Delivered to source";
+            }
+            else if (jobs.All(job => job.Status == "Cancelled"))
+            {
+                jobsCompletion = "Cancelled";
+            }
+            else
+            {
+                jobsCompletion = "In progress";
+            }
+        }
+        else
+        {
+            jobsCompletion = "None";
+        }
+
+        var orderResponse = new OrderResponse
+        {
+            OrderId = order.OrderId,
+            Name = order.Name,
+            CallbackUrl = order.CallbackUrl,
+            TimeCreated = order.TimeCreated,
+            Deadline = order.Deadline,
+            Status = order.Status,
+            JobsCompletion = jobsCompletion
+        };
+
+        return orderResponse;
     }
 
     [Action("Create order", Description = "Create a new order.")]
@@ -59,7 +94,7 @@ public class OrderActions : MemoQCMSInvocable
                           $"{InvocationContext.UriInfo.BridgeServiceUrl.ToString().TrimEnd('/')}{ApplicationConstants.BridgePath}"
                               .SetQueryParameter("id", connectionKey)
         };
-        
+
         var order = await ExecuteRequestAsync<OrderDto>("/orders", Method.Post, requestBody);
         return order;
     }
