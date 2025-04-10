@@ -58,7 +58,7 @@ public class OrderActions : MemoQCMSInvocable
             {
                 jobsCompletion = "Cancelled";
             }
-            else if (jobs.All(job => job.Status == "Delivered to source" || job.Status == "Cancelled"))
+            else if (jobs.All(job => job.Status == "DeliveredToSource" || job.Status == "Cancelled"))
             {
                 jobsCompletion = "Delivered to source or cancelled";
             }
