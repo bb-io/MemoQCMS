@@ -64,5 +64,23 @@ namespace Tests.MemoQCMS
             await Throws.MisconfigurationException(() => actions.CreateJob(orderidentifier, input, file));
 
         }
+
+
+        [TestMethod]
+        public async Task CreateJob_IsSuccess()
+        {
+            var actions = new JobActions(InvocationContext, FileManager);
+
+            var orderidentifier = new OrderIdentifier() { OrderId = "250506-0O3" };
+
+            var input = new CreateJobRequest() { Name = "/real-rivian-adventures", SourceLanguage = "eng", TargetLanguage = "ukr" };
+            var file = new Apps.MemoQCMS.Models.FileWrapper() { File = new Blackbird.Applications.Sdk.Common.Files.FileReference() { Name = "/testfile.txt", ContentType = "text/plain" } };
+
+           var response = await actions.CreateJob(orderidentifier, input, file);
+
+            Console.WriteLine($"Job ID: {response.TranslationJobId}");
+            Assert.IsNotNull(response);
+
+        }
     }
 }
