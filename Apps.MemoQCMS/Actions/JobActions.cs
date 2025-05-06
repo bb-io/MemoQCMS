@@ -81,6 +81,7 @@ public class JobActions : MemoQCMSInvocable
 
         using (var httpClient = new HttpClient())
         {
+            httpClient.Timeout = TimeSpan.FromMinutes(3);
             var connectionKey = InvocationContext.AuthenticationCredentialsProviders.Get(CredsNames.ConnectionKey).Value;
             httpClient.DefaultRequestHeaders.Add("Authorization", $"CMSGATEWAY-API {connectionKey}");
 

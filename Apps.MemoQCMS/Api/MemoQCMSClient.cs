@@ -17,7 +17,8 @@ public class MemoQCMSClient : BlackBirdRestClient
     public MemoQCMSClient(IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProviders)
         : base(new RestClientOptions
         {
-            ThrowOnAnyError = false, BaseUrl = new(CreateBaseUrl(authenticationCredentialsProviders.Get(CredsNames.BaseUrl).Value))
+            ThrowOnAnyError = false, BaseUrl = new(CreateBaseUrl(authenticationCredentialsProviders.Get(CredsNames.BaseUrl).Value)),
+            MaxTimeout = 180000
         })
     {
         var connectionKey = authenticationCredentialsProviders.Get(CredsNames.ConnectionKey).Value;
