@@ -1,6 +1,7 @@
 ﻿using Apps.MemoQCMS.Constants;
 using Apps.MemoQCMS.Models.Dtos;
 using Blackbird.Applications.Sdk.Common.Authentication;
+using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Utils.Extensions.Sdk;
 using Blackbird.Applications.Sdk.Utils.RestSharp;
 using Newtonsoft.Json;
@@ -32,7 +33,14 @@ public class MemoQCMSClient : BlackBirdRestClient
     
     protected override Exception ConfigureErrorException(RestResponse response)
     {
-        var error = JsonConvert.DeserializeObject<ErrorDto>(response.Content);
-        return new(error.Message);
+        try
+        {
+            var error = JsonConvert.DeserializeObject<ErrorDto>(response.Content);
+            return new PluginApplicationException(error.Message);
+        }
+        catch (Exception e)
+        {
+            return new PluginApplicationException(response.Content ?? string.Empty, e);
+        }
     }
 }
